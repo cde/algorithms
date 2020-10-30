@@ -1,0 +1,58 @@
+// Translate word into Piglatin
+const translateIntoPiglatin = (word) => {
+    let translateWord = ''
+    if (word && (word[0].match(/[aeiou]/g) || word[0].match(/[^\w]/g ))) {
+        translateWord = word + "yay";
+        return translateWord;
+    } else {
+        let firstMatch = word.match(/[aeiou]/g) || 0;
+        let vowel = word.indexOf(firstMatch[0]);
+        translateWord = word.substring(vowel) + word.substring(0, vowel) + "ay";
+        return translateWord;
+    }
+}
+
+console.log(translateIntoPiglatin('eat'))
+console.log(translateIntoPiglatin('omelet'))
+console.log(translateIntoPiglatin('pig'))
+console.log(translateIntoPiglatin('banana'))
+console.log(translateIntoPiglatin('trash'))
+console.log(translateIntoPiglatin('tssk'))
+
+// Translate sentence
+
+// sentence: 'Hi, my name is 'Einas'.'
+// output: 'iHay, myay amenay isyay 'Einasyay'.'
+
+const translateSentence = (sentence) => {
+    const regex = /[^\w]/g
+    let translatedSentence = []
+    let arrayWords = sentence.split(' ')
+    let puntuationBegin = null
+    let puntuationEndPos = null
+
+    let translatedWord = ''
+
+    translatedSentence = arrayWords.map( word => {
+        if(word[0].match(regex) !== null) { puntuationBegin = word[0] }
+
+        if( puntuationBegin !== null) {
+            puntuationEndPos = word.substring(1).search(regex)
+            if (puntuationEndPos > 0) { puntuationEndPos += 1 }
+        } else {
+            puntuationEndPos = word.search(regex)
+        }
+        if (puntuationEndPos > 0 ) {
+            translatedWord = translateIntoPiglatin(word.substring(0,puntuationEndPos))
+            translatedWord += word.substring(puntuationEndPos)
+        } else {
+            translatedWord = translateIntoPiglatin(word)
+        }
+        return translatedWord
+    })
+    return translatedSentence.join(' ');
+}
+
+console.log( translateSentence ("Hi, my name is 'Einas'."))
+
+
